@@ -32,6 +32,23 @@
     <!--[if lt IE 9]>
     <script src="lib/js/html5shiv.js"></script>
     <![endif]-->
+
+    <style>
+      div.vertical {
+        /*font-size: 150%;*/
+        margin: 0 auto;
+        width: 200px;
+        display: flex;
+        white-space: nowrap;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      div.vertical em {
+        color: yellow;
+        font-size: 150%;
+      }
+    </style>
+
   </head>
 
   <body>
@@ -39,11 +56,90 @@
       <div class="slides">
         <section>
           <h1>Unicode and Character Encodings</h1>
-          <h3>Everything you ever wanted to know but were afraid to ask</h3>
-          <p>
+          <h2>Everything you ever wanted to know but were afraid to ask</h2>
+          <p style="text-align: right">
             <small>by Jon Willesen</small>
           </p>
         </section>
+
+        <section>
+          <h1>In the Beginning</h1>
+          <small class="fragment">sort of</small>
+          <h2 class="fragment">there was ASCII</h2>
+          <div class="fragment vertical">
+            <span><em>A</em>merican</span>
+            <span><em>S</em>tandard</span>
+            <span><em>C</em>ode for</span>
+            <span><em>I</em>nformation</span>
+            <span><em>I</em>nterchange</span>
+          </div>
+          <aside class="notes">
+            <p>Initially used for teletype machines, which explains all of the
+            "control characters"</p>
+          </aside>
+        </section>
+
+        <section>
+          <h1>Quiz Time!</h1>
+          <h2>How many bits per character in ASCII?</h2>
+          <div class="fragment vertical" style="width: 140px">
+            <span>A) 9 bits</span>
+            <span>B) 8 bits</span>
+            <span class="fragment highlight-green">C) 7 bits</span>
+            <span>D) 6 bits</span>
+            <span>E) 5 bits</span>
+          </div>
+          <p class="fragment">8th bit used for parity</p>
+        </section>
+
+        <section>
+          <h2>128 Characters</h2>
+          <p><span class="fragment highlight-red">American</span>
+            Standard
+            Code for
+            Information
+            Interchange
+          </p>
+          <img src="http://www.asciitable.com/index/asciifull.gif" />
+          <aside class="notes">
+            <p>Lots of control characters for controlling hardware.</p>
+            <p>Ever wondered why line-endings on Windows were CR-LF?</p>
+          </aside>
+        </section>
+
+        <section>
+          <h3>
+            <span class="fragment" data-fragment-index="2">¿</span>
+            What about other countries and languages?
+          </h3>
+          <p class="fragment" data-fragment-index="1">é ü à ô ß Å œ ç ñ</p>
+          <div class="fragment" data-fragment-index="3">
+            <h4>Not even enough characters for American English:</h4>
+            <ul>
+              <li>résumé</li>
+              <li>piñata</li>
+              <li>naïve</li>
+              <li>m-dash: &mdash;</li>
+            </ul>
+          </div>
+          <aside class="notes">
+            <p>Turns out there are more countries than America and more languages
+            than English.</p>
+            <p>128 characters just isn't enough</p>
+            <p>Isn't even really enough for English, since we borrow so many
+            words from other languages</p>
+          </aside>
+        </section>
+
+        <section>
+          <h2>That's ok &mdash; there's still another bit!</h2>
+          <small class="fragment">Who needs parity anyway?</small>
+          <h2 class="fragment">Time for a new standard</h2>
+        </section>
+        <section>
+          <h3>256 Characters</h3>
+        </section>
+
       </div>
     </div>
 
