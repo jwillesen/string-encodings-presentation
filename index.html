@@ -65,6 +65,17 @@
           <p style="text-align: right">
             <small>by Jon Willesen</small>
           </p>
+          <small><a href="http://jwillesen.github.io/string-encodings-presentation/">http://jwillesen.github.io/string-encodings-presentation/</a></small>
+        </section>
+
+        <section>
+          <h1>Table of Contents</h1>
+          <ul>
+            <li class="fragment">Prerequisites</li>
+            <li class="fragment">A Brief History of Character Encodings</li>
+            <li class="fragment">Character Encodings in Ruby</li>
+            <li class="fragment">Character Encodings in JavaScript</li>
+          </ul>
         </section>
 
         <section>
@@ -79,13 +90,42 @@
           </div>
           <p class="fragment">Encoding: A way interpret binary sequences as characters.</p>
           <aside class="notes">
+            <p>This is going to seem really basic, but...</p>
             <p>The point is that computers don't think in characters, they
             think in numbers. So if you want to represent text in a computer,
             you're going to represent it with numbers.</p>
             <p>This representation is called an "encoding."</p>
-            <p>This isn't a unique idea all file formats, like images, 
+            <p>This isn't a unique idea all file formats, like images,
             are like this. Text and characters are such a basic function of our
             programming languages, we tend to forget this abstraction.</p>
+          </aside>
+        </section>
+
+        <section>
+          <h1>Strings</h1>
+          <p>A <code>String</code> type and a <code>"String Literal"</code>
+          construct are present in most programming languages</p>
+          <p class="fragment">Abstractly: A string is a sequence of characters</p>
+          <p class="fragment">Concretely: Often implemented as an array of bytes</p>
+          <div class="horizontal">
+            <ul>
+              <li class="fragment">C: <code>char[]</code> null terminated</li>
+              <li class="fragment">C++: <code>std::string</code></li>
+              <li class="fragment">Java: <code>char String Character</code></li>
+              <li class="fragment">Ruby: <code>String</code></li>
+              <li class="fragment">JavaScript: primitive strings and <code>String</code></li>
+            </ul>
+            <ul class="fragment">
+              <li>mutation</li>
+              <li>concatenation <code>(a+b)</code></li>
+              <li>console output</li>
+              <li>regular expressions</li>
+            </ul>
+          </div>
+          <aside class="notes">
+            <p>Of course javascript has to be the weirdo</p>
+            <p>Concatenation often supported by the + operator</p>
+            <p>We'll get back to Ruby and JavaScript later</p>
           </aside>
         </section>
 
@@ -101,6 +141,9 @@
             <span><em>I</em>nterchange</span>
           </div>
           <aside class="notes">
+            <p>There were other encodings besides ASCII, but ASCII is the one
+            that we still use today, so it's the only one I'm going to go over.
+            </p>
           </aside>
         </section>
 
@@ -110,7 +153,7 @@
           <div class="fragment vertical" style="width: 140px">
             <span>A) 9 bits</span>
             <span>B) 8 bits</span>
-            <span class="fragment highlight-green">C) 7 bits</span>
+            <span class="fragment grow highlight-green">C) 7 bits</span>
             <span>D) 6 bits</span>
             <span>E) 5 bits</span>
           </div>
@@ -170,12 +213,13 @@
         </section>
 
         <section>
-          <h3>256 Characters<span class="fragment">... still isn't enough</span></h3>
-          <ul class="fragment">
+          <h3>256 Characters<span class="fragment" data-fragment-index="1">... still isn't enough</span></h3>
+          <h4 class="fragment" data-fragment-index="2">Many Standards:</h4>
+          <ul class="fragment" data-fragment-index="2">
             <li>ISO-8859-1 (aka Latin-1)</li>
             <li>Windows-1252</li>
             <li>Mac-Roman</li>
-            <div class="fragment">
+            <div class="fragment" data-fragment-index="3">
               <li>ISO-8859-[2-16]</li>
               <li>Windows-125[0-8]</li>
               <li>Mac-Cyrillic</li>
@@ -183,9 +227,11 @@
             </div>
           </ul>
           <aside class="notes">
+            <p>The first three are just for Western European languages.</p>
             <p>Mac-Roman has a lot of the same characters, but in a different
             order.</p>
-            <p>The first three are just for Western European languages.</p>
+            <p>And then of course there are more countries and languages than
+            just those in western europe.</p>
           </aside>
         </section>
 
@@ -210,8 +256,10 @@ CP951
           </code></pre>
           <p>And so on...</p>
           <aside class="notes">
+            <p>Turns out over the years we've come up with quite a few encodings
+            for textual data.</p>
             <p>Question: What happens when you want to write a paper comparing
-            multiple languages and what you want use chracters from different 
+            multiple languages and you want use chracters from different
             encodings?</p>
           </aside>
         </section>
@@ -227,26 +275,63 @@ CP951
 
         <section>
           <h1>ISO 10646 (UCS) and Unicode</h1>
-          <div class="vertical">
-            <p><em>U</em>niversal</p>
-            <p><em>C</em>haracter</p>
-            <p><em>S</em>et</p>
+          <div class="horizontal">
+            <div class="fragment vertical">
+              <p><em>U</em>niversal</p>
+              <p><em>C</em>haracter</p>
+              <p><em>S</em>et</p>
+            </div>
+            <img class="fragment" src="enumerate-all-the-characters.jpg" />
           </div>
           <aside class="notes">
-            <p>UCS and Unicode are not quite the same thing.</p>
+            <p>UCS and Unicode are not quite the same thing. Started as separate
+            standards that then agreed to unify.</p>
             <ul>
               <li>ISO 10646 maps numbers to characters.</li>
-              <li>Unicode defines additional rules and algorithms for dealing
-              with those charcters properly.</li>
+              <li>Unicode uses the UCS mapping and also defines additional rules
+              and algorithms for dealing with those charcters properly.</li>
             </ul>
+            <p>Assign a number to every character, ever.</p>
           </aside>
         </section>
 
         <section>
           <h1>New Encoding: UCS-2</h1>
-          <p>Novel Concept: 2 bytes per character</p>
-          <p>What order do those bytes come in again?</p>
+          <p>Uses 2 bytes per character</p>
+          <p class="fragment">C and C++ get a <code>wchar_t</code> type</p>
+          <p class="fragment">Unicode fork of the Windows API</p>
+          <p class="fragment">Surely 65,536 characters is enough</p>
+          <aside class="notes">
+            <p>2 bytes per character? What a great idea! All our problems are
+            solved.</p>
+          </aside>
         </section>
+
+        <section>
+          <h1>Quiz Time!</h1>
+          <p>How many characters are in written Chinese?</p>
+          <small class="fragment">order of magnitude</small>
+          <div class="fragment vertical">
+            <span>A) 10</span>
+            <span>B) 100</span>
+            <span>C) 1,000</span>
+            <span>D) 10,000</span>
+            <span class="fragment grow highlight-green">E) 100,000</span>
+          </div>
+          <aside class="notes">
+            <p>Certainly most of these characters aren't used all that often, or
+            ever. But when you're creating a _universal_ character set, you
+            include everything.</p>
+          </aside>
+        </section>
+
+        <section>
+          <h1>Well...</h1>
+          <p>UCS-4 (4 bytes per character) just seems wasteful</p>
+          <p>There's an awful lot of text out there that's plain ASCII; most of
+          the bytes will just be 0.</p>
+        </section>
+
 
         <section>
           <h1>UTF</h1>
@@ -267,6 +352,11 @@ CP951
             <p><em>O</em>rder</p>
             <p><em>M</em>ark</p>
           </div>
+          <p>What order do those bytes come in again?</p>
+          <ul>
+            <li>Little Endian</li>
+            <li>Big Endian</li>
+          </ul>
         </section>
 
 
