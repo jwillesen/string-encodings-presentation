@@ -35,7 +35,6 @@
 
     <style>
       div.vertical {
-        /*font-size: 150%;*/
         margin: 0 auto;
         width: 200px;
         display: flex;
@@ -46,6 +45,12 @@
       div.vertical em {
         color: yellow;
         font-size: 150%;
+      }
+
+      div.horizontal {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
       }
     </style>
 
@@ -63,6 +68,28 @@
         </section>
 
         <section>
+          <h1>Prerequisite Understanding</h1>
+          <p>Q: What do computers think in?</p>
+          <div class="fragment">
+            <p>A: Binary</p>
+            <div class="fragment horizontal">
+              <p>0</p>
+              <p>1</p>
+            </div>
+          </div>
+          <p class="fragment">Encoding: A way interpret binary sequences as characters.</p>
+          <aside class="notes">
+            <p>The point is that computers don't think in characters, they
+            think in numbers. So if you want to represent text in a computer,
+            you're going to represent it with numbers.</p>
+            <p>This representation is called an "encoding."</p>
+            <p>This isn't a unique idea all file formats, like images, 
+            are like this. Text and characters are such a basic function of our
+            programming languages, we tend to forget this abstraction.</p>
+          </aside>
+        </section>
+
+        <section>
           <h1>In the Beginning</h1>
           <small class="fragment">sort of</small>
           <h2 class="fragment">there was ASCII</h2>
@@ -74,8 +101,6 @@
             <span><em>I</em>nterchange</span>
           </div>
           <aside class="notes">
-            <p>Initially used for teletype machines, which explains all of the
-            "control characters"</p>
           </aside>
         </section>
 
@@ -102,8 +127,11 @@
           </p>
           <img src="http://www.asciitable.com/index/asciifull.gif" />
           <aside class="notes">
-            <p>Lots of control characters for controlling hardware.</p>
+            <p>Initially used for teletype machines, which explains all of the
+            "control characters," which were meant for controlling hardware</p>
             <p>Ever wondered why line-endings on Windows were CR-LF?</p>
+            <p>Ever wonder why uppercase letters sort before lowercase?</p>
+            <p>I want you to notice this word: "American."</p>
           </aside>
         </section>
 
@@ -135,10 +163,116 @@
           <h2>That's ok &mdash; there's still another bit!</h2>
           <small class="fragment">Who needs parity anyway?</small>
           <h2 class="fragment">Time for a new standard</h2>
+          <aside class="notes">
+            <p>Parity started being somewhat less important when computer users
+            started getting luxuries, like monitors.</p>
+          </aside>
+        </section>
+
+        <section>
+          <h3>256 Characters<span class="fragment">... still isn't enough</span></h3>
+          <ul class="fragment">
+            <li>ISO-8859-1 (aka Latin-1)</li>
+            <li>Windows-1252</li>
+            <li>Mac-Roman</li>
+            <div class="fragment">
+              <li>ISO-8859-[2-16]</li>
+              <li>Windows-125[0-8]</li>
+              <li>Mac-Cyrillic</li>
+              <li>Shift_JIS</li>
+            </div>
+          </ul>
+          <aside class="notes">
+            <p>Mac-Roman has a lot of the same characters, but in a different
+            order.</p>
+            <p>The first three are just for Western European languages.</p>
+          </aside>
+        </section>
+
+        <section>
+          <pre><code data-trim content-editable>
+$ ruby -e "puts Encoding.list.size"
+100
+$ ruby -e "puts Encoding.list.map(&amp;:name).sort"
+ASCII-8BIT
+Big5
+Big5-HKSCS
+Big5-UAO
+CP50220
+CP50221
+CP51932
+CP850
+CP852
+CP855
+CP949
+CP950
+CP951
+          </code></pre>
+          <p>And so on...</p>
+          <aside class="notes">
+            <p>Question: What happens when you want to write a paper comparing
+            multiple languages and what you want use chracters from different 
+            encodings?</p>
+          </aside>
         </section>
         <section>
-          <h3>256 Characters</h3>
+          <h1>Ok fiiiiiiiine</h1>
+          <h2>We'll use more bits</h2>
+          <small class="fragment">Hard disk space is getting cheaper anyway.</small>
+          <h3 class="fragment">And maybe agree on a standard</h3>
+          <aside class="notes">
+            <p></p>
+          </aside>
         </section>
+
+        <section>
+          <h1>ISO 10646 (UCS) and Unicode</h1>
+          <div class="vertical">
+            <p><em>U</em>niversal</p>
+            <p><em>C</em>haracter</p>
+            <p><em>S</em>et</p>
+          </div>
+          <aside class="notes">
+            <p>UCS and Unicode are not quite the same thing.</p>
+            <ul>
+              <li>ISO 10646 maps numbers to characters.</li>
+              <li>Unicode defines additional rules and algorithms for dealing
+              with those charcters properly.</li>
+            </ul>
+          </aside>
+        </section>
+
+        <section>
+          <h1>New Encoding: UCS-2</h1>
+          <p>Novel Concept: 2 bytes per character</p>
+          <p>What order do those bytes come in again?</p>
+        </section>
+
+        <section>
+          <h1>UTF</h1>
+          <div class="vertical">
+            <p><em>U</em>nicode</p>
+            <p><em>T</em>ransformation</p>
+            <p><em>F</em>ormat</p>
+          </div>
+          <aside class="notes">
+            <p>First word could also be UCS</p>
+          </aside>
+        </section>
+
+        <section>
+          <h1>BOM</h1>
+          <div class="vertical">
+            <p><em>B</em>yte</p>
+            <p><em>O</em>rder</p>
+            <p><em>M</em>ark</p>
+          </div>
+        </section>
+
+
+
+
+
 
       </div>
     </div>
