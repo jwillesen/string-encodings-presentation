@@ -274,7 +274,7 @@ CP951
         </section>
 
         <section>
-          <h1>ISO 10646 (UCS) and Unicode</h1>
+          <h2>ISO 10646 (UCS) and Unicode</h2>
           <div class="horizontal">
             <div class="fragment vertical">
               <p><em>U</em>niversal</p>
@@ -283,6 +283,7 @@ CP951
             </div>
             <img class="fragment" src="enumerate-all-the-characters.jpg" />
           </div>
+          <p class="fragment">And hey, characters 0-127 match ASCII!</p>
           <aside class="notes">
             <p>UCS and Unicode are not quite the same thing. Started as separate
             standards that then agreed to unify.</p>
@@ -296,15 +297,27 @@ CP951
         </section>
 
         <section>
-          <h1>New Encoding: UCS-2</h1>
-          <p>Uses 2 bytes per character</p>
-          <p class="fragment">C and C++ get a <code>wchar_t</code> type</p>
-          <p class="fragment">Unicode fork of the Windows API</p>
-          <p class="fragment">Surely 65,536 characters is enough</p>
-          <aside class="notes">
-            <p>2 bytes per character? What a great idea! All our problems are
-            solved.</p>
-          </aside>
+          <section>
+            <h1>New Encoding: UCS-2</h1>
+            <p>Uses 2 bytes per character</p>
+            <p class="fragment">C and C++ get a <code>wchar_t</code> type</p>
+            <p class="fragment">Unicode fork of the Windows API</p>
+            <p class="fragment">Surely 65,536 characters is enough</p>
+            <aside class="notes">
+              <p>2 bytes per character? What a great idea! All our problems are
+              solved.</p>
+            </aside>
+          </section>
+          <section>
+            <h2>Endianness: What order do these bytes come in again?</h2>
+            <h2>BOM</h2>
+            <div class="vertical">
+              <p><em>B</em>yte</p>
+              <p><em>O</em>rder</p>
+              <p><em>M</em>ark</p>
+            </div>
+            <p>Optional first character to determine endianess</p>
+          </section>
         </section>
 
         <section>
@@ -326,44 +339,147 @@ CP951
         </section>
 
         <section>
-          <h1>Well...</h1>
-          <p>UCS-4 (4 bytes per character) just seems wasteful</p>
-          <p>There's an awful lot of text out there that's plain ASCII; most of
-          the bytes will just be 0.</p>
+          <h1>We Need Moar Bits!</h1>
+          <h2 class="fragment">But... Well...</h2>
+          <p class="fragment">UCS-4 (4 bytes per character) just seems wasteful</p>
+          <small class="fragment">Disk space isn't that cheap</small>
+          <p class="fragment">Many text transfer protocols are
+          based on ASCII characters. Most of the bytes would be 0!</p>
+          <ul class="fragment">
+            <li>HTTP</li>
+            <li>SMTP</li>
+            <li>FTP</li>
+            <li>Telnet</li>
+          </ul>
         </section>
-
 
         <section>
           <h1>UTF</h1>
-          <div class="vertical">
-            <p><em>U</em>nicode</p>
-            <p><em>T</em>ransformation</p>
-            <p><em>F</em>ormat</p>
+          <div class="horizontal">
+            <div class="fragment vertical">
+              <p><em>U</em>nicode</p>
+              <p><em>T</em>ransformation</p>
+              <p><em>F</em>ormat</p>
+            </div>
+            <div>
+              <p class="fragment">variable length encoding</p>
+              <p class="fragment">UTF-8: 1 to 4 bytes per character</p>
+              <p class="fragment">UTF-16: 2 or 4 bytes per character</p>
+              <p class="fragment">Designed to encode all unicode characters</p>
+            </div>
           </div>
           <aside class="notes">
             <p>First word could also be UCS</p>
+            <p>Number of bytes used to encode a character depends on the
+            character</p>
+            <p>UTF-16 is similar to UCS-2</p>
           </aside>
         </section>
 
         <section>
-          <h1>BOM</h1>
-          <div class="vertical">
-            <p><em>B</em>yte</p>
-            <p><em>O</em>rder</p>
-            <p><em>M</em>ark</p>
+          <h1>UTF-8</h1>
+          <p>By far the most popular encoding</p>
+          <div class="horizontal">
+            <div class="fragment">
+              <p style="text-align: left">Advantages:</p>
+              <ul>
+                <li>Superset of ASCII</li>
+                <li>Can encode all unicode characters</li>
+                <li>No endianness problems</li>
+              </ul>
+            </div>
+            <div class="fragment">
+              <p style="text-align: left">Disadvantages:</p>
+              <ul>
+                <li>Can use more space than an encoding suited for the locale
+                </li>
+                <li>More complicated algorithm to decode</li>
+                <li>Number of bytes no longer directly related to the number
+                of characters</li>
+              </ul>
+            </div>
           </div>
-          <p>What order do those bytes come in again?</p>
-          <ul>
-            <li>Little Endian</li>
-            <li>Big Endian</li>
-          </ul>
+          <aside class="notes">
+            
+          </aside>
         </section>
 
+        <section>
+          <h1>The Main Point:</h1>
+          <h2 class="fragment roll-in">There is no such thing as plain text</h2>
+          <p class="fragment">Just having the data isn't enough.<br/>You also have
+          to know how it's encoded.</p>
+          <aside class="notes">
+            <p>So why have I going through all this?</p>
+            <p>The point seems obvious, but going back to beginning -- sometimes
+            the details get lost through all the layers of abstraction.</p>
+          </aside>
+        </section>
 
+        <section>
+          <h1>Unicode in Ruby</h1>
+          <p class="fragment">Ruby 1.8: <code>String</code> is a sequence of 
+          bytes</p>
+          <pre class="fragment"><code>
+$ rvm 1.8 do ruby -e "puts '😀'.size"
+4
+          </code></pre>
+          <p class="fragment">
+            Ruby 1.9: Adds the <code>Encoding</code> class<br/>
+            <code>String</code> has an Encoding<br/>
+            <code>String</code> is a sequence of characters
+          </p>
+          <pre class="fragment"><code>
+$ rvm 1.9 do ruby -e "puts '😀'.size"
+1
+$ rvm 1.9 do ruby -e "puts '😀'.bytes.size"
+4
+          </code></pre>
+        </section>
 
+        <section>
+          <section>
+            <h1>The Magic Comment</h1>
+            <p>Ruby 1.9 also adds the <em>magic comment</em><br/>
+            to specify the source code encoding</p>
+            <pre><code># encoding: utf-8</code></pre>
+            <aside class="notes">
+              <p>which brings up the question -- what encoding do all those plain
+              text protocols use?
+              <p>magic comment assumes the encoding is compatible with ascii
+              this is one of the reasons UTF-8 is so popular</p>
+              <p>turns out most single-byte encodings are ascii compatible</p>
+              </p>
+            </aside>
+          </section>
+          <section>
+            <h3>Typical mechanism in text based standards</h3>
+            <ul>
+              <li class="fragment">
+                HTTP and SMTP use Content-Type header
+                <pre><code>Content-Type: text/html; charset=UTF-8</code></pre>
+              </li>
+              <li class="fragment">
+                HTML has a meta element
+                <pre><code>&lt;meta charset="utf-8"&gt;</code></pre>
+              </li>
+              <li class="fragment">
+                XML uses an encoding directive
+                <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</code></pre>
+              </li>
+            </ul>
+          </section>
+        </section>
 
-
-
+        <section>
+          <h1>Unicode in JavaScript</h1>
+          <p class="fragment">Strings are sequences of 16-bit values</p>
+          <p class="fragment">Characters are encoded in UTF-16</p>
+          <pre class="fragment"><code>
+> "😀".length"
+2
+          </code></pre>
+        </section>
       </div>
     </div>
 
