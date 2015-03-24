@@ -61,11 +61,12 @@
       <div class="slides">
         <section>
           <h1>Unicode and Character Encodings</h1>
-          <h2>Everything you ever wanted to know but were afraid to ask</h2>
+          <h2>Everything you ever wanted to know but were afraid to ask*</h2>
           <p style="text-align: right">
             <small>by Jon Willesen</small>
           </p>
           <small><a href="http://jwillesen.github.io/string-encodings-presentation/">http://jwillesen.github.io/string-encodings-presentation/</a></small>
+          <small style="display: block; text-align: left">*(not really)</small>
         </section>
 
         <section>
@@ -73,17 +74,17 @@
           <ul>
             <li class="fragment">Prerequisites</li>
             <li class="fragment">A Brief History of Character Encodings</li>
-            <li class="fragment">Character Encodings in Ruby</li>
-            <li class="fragment">Character Encodings in JavaScript</li>
+            <li class="fragment">The Main Point</li>
+            <li class="fragment">Character Encodings in Ruby and JavaScript</li>
           </ul>
         </section>
 
         <section>
-          <h1>Prerequisite Understanding</h1>
+          <h1>Prerequisites</h1>
           <p>Q: What do computers think in?</p>
           <div class="fragment">
             <p>A: Binary</p>
-            <div class="fragment horizontal">
+            <div class="horizontal">
               <p>0</p>
               <p>1</p>
             </div>
@@ -123,9 +124,11 @@
             </ul>
           </div>
           <aside class="notes">
-            <p>Of course javascript has to be the weirdo</p>
+            <p>I'd call out JavaScript for being weird here, but C++ has the
+            same problem</p>
             <p>Concatenation often supported by the + operator</p>
             <p>We'll get back to Ruby and JavaScript later</p>
+            <p>That's it for the basics, lets get to some history</p>
           </aside>
         </section>
 
@@ -142,7 +145,8 @@
           </div>
           <aside class="notes">
             <p>There were other encodings besides ASCII, but ASCII is the one
-            that we still use today, so it's the only one I'm going to go over.
+            that we still use today, so it's the only one I'm going to talk
+            about.
             </p>
           </aside>
         </section>
@@ -227,6 +231,11 @@
             </div>
           </ul>
           <aside class="notes">
+            <p>We didn't just come up with one standard, we came up with many
+            </p>
+            <p>Many of these are just mappings from numbers to characters</p>
+            <p>ASCII was just one of many standards, it's just the one
+            that we still use</p>
             <p>The first three are just for Western European languages.</p>
             <p>Mac-Roman has a lot of the same characters, but in a different
             order.</p>
@@ -258,18 +267,23 @@ CP951
           <aside class="notes">
             <p>Turns out over the years we've come up with quite a few encodings
             for textual data.</p>
+            <p>For those of you old enough to remember, this was why sometimes
+            web pages and emails had strange characters in them. The browser
+            or the email program was using the wrong encoding to interpret the
+            data.</p>
             <p>Question: What happens when you want to write a paper comparing
             multiple languages and you want use chracters from different
             encodings?</p>
           </aside>
         </section>
+
         <section>
           <h1>Ok fiiiiiiiine</h1>
           <h2>We'll use more bits</h2>
           <small class="fragment">Hard disk space is getting cheaper anyway.</small>
           <h3 class="fragment">And maybe agree on a standard</h3>
           <aside class="notes">
-            <p></p>
+            <p>All right, so 256 characters isn't enough either.</p>
           </aside>
         </section>
 
@@ -283,7 +297,8 @@ CP951
             </div>
             <img class="fragment" src="enumerate-all-the-characters.jpg" />
           </div>
-          <p class="fragment">And hey, characters 0-127 match ASCII!</p>
+          <p class="fragment">Example: ☃ is U+2603: SNOWMAN</p>
+          <p class="fragment">And hey, characters U+00 through U+FF (127) match ASCII</p>
           <aside class="notes">
             <p>UCS and Unicode are not quite the same thing. Started as separate
             standards that then agreed to unify.</p>
@@ -303,14 +318,15 @@ CP951
           <p class="fragment">Unicode fork of the Windows API</p>
           <p class="fragment">Surely 65,536 characters is enough</p>
           <aside class="notes">
-            <p>2 bytes per character? What a great idea! All our problems are
-            solved.</p>
+            <p>2 bytes per character! What a great idea! All our problems are
+            solved!</p>
           </aside>
         </section>
+
         <section>
           <h2>Endianness: What order do these bytes come in again?</h2>
           <div class="fragment">
-            <p>BOM: Optional first character to determine endianess</p>
+            <p>BOM: U+FEFF<br/>Optional first character to determine endianess</p>
             <div class="vertical">
               <p><em>B</em>yte</p>
               <p><em>O</em>rder</p>
@@ -406,18 +422,18 @@ CP951
           <h1>UTF-8 Encoding Details</h1>
           <small>What do the bits mean?</small>
           <ul>
-            <li class="fragment">0x0 to 0x7F (7-bits): 1-byte &mdash; the same as ASCII
+            <li class="fragment">U+0000 to U+007F (7-bits): 1-byte &mdash; the same as ASCII
             <pre><code>0xxxxxxx</code></pre>
             </li>
 
-            <li class="fragment">0x80 to 0x07FF (11-bits): 2 bytes
+            <li class="fragment">U+0080 to U+07FF (11-bits): 2 bytes
             <pre><code>110xxxxx 10xxxxxx</code></pre>
             </li>
 
-            <li class="fragment">0x0800 to 0xFFFF (16-bits): 3 bytes
+            <li class="fragment">U+0800 to U+FFFF (16-bits): 3 bytes
             <pre><code>1110xxxx 10xxxxxx 10xxxxxx</code></pre>
             </li>
-            <li class="fragment">0x10000 to 0x1FFFF (21-bits): 4 bytes
+            <li class="fragment">U+10000 to U+1FFFF (21-bits): 4 bytes
             <pre><code>11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</code></pre>
             </li>
           </ul>
@@ -450,6 +466,10 @@ CP951
             How do you know you're getting the right characters in the
             translation when you don't speak or write the language?
             </p>
+
+            <p>Often, you can make a good guess. You can look at the binary and
+            see if there are UTF-8 sequences in there, or something. But do we
+            really want to be guessing?</p>
           </aside>
         </section>
 
@@ -514,6 +534,10 @@ $ rvm 1.9 do ruby -e "puts '😀'.bytes.size"
 > "😀".length"
 2
           </code></pre>
+        </section>
+
+        <section>
+          <h1>Questions?</h1>
         </section>
       </div>
     </div>
